@@ -57,6 +57,8 @@ test('get the first product by id ', async ({request})=>{
     expect(firstproduct).toHaveProperty('price');
     expect(firstproduct).toHaveProperty('brand');
     expect(firstproduct).toHaveProperty('category');
+    
+    expect(responsebody.products[0].category).toBeDefined();
 
     //category is nested object which is printing in one line.
     //so using stringfy 
@@ -67,3 +69,29 @@ test('get the first product by id ', async ({request})=>{
     console.log(firstproductjson);
     
 })
+
+//validating the structure 
+test('validating the struture of the response', async ({request})=>{
+    const response= await request.get(`${baseURL}/productsList`);
+    const responsebody=await response.json();
+    //print the complete body 
+    //console.log(responsebody)
+    //printing the first record in the body 
+    const firstproductbody=await responsebody.products[0]
+    //print the first product body
+    console.log(firstproductbody)
+
+    //validating the schema of the first product 
+    //expect(await responsebody.product[0]).toEqual(
+    expect(firstproductbody).toEqual(  
+        expect.objectContaining({
+            id:expect.any(Number),
+            name:expect.any(String),
+            price:expect.any(String),
+            category:expect.any(Object)
+        })
+    )
+})
+
+//how to validate the category object, category object have another object which is usertype 
+//validate the complete schema of the response body not only the first product 
