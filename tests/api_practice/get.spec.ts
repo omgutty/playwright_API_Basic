@@ -80,7 +80,6 @@ test('validating the struture of the response', async ({request})=>{
     const firstproductbody=await responsebody.products[0]
     //print the first product body
     console.log(firstproductbody)
-
     //validating the schema of the first product 
     //expect(await responsebody.product[0]).toEqual(
     expect(firstproductbody).toEqual(  
@@ -94,4 +93,40 @@ test('validating the struture of the response', async ({request})=>{
 })
 
 //how to validate the category object, category object have another object which is usertype 
+
+test('validating the structure of the response including the nested objects', async ({request})=>{
+    const response = await request.get(`${baseURL}/productsList`)
+    const responsebody=await response.json()
+    const responsefirstproduct=responsebody.products[0]
+    const responsebodyobj=  responsefirstproduct.category;
+    console.log(JSON. stringify( responsebodyobj,null, 2));
+
+    //only verifying the nested object 
+    expect(responsebodyobj).toEqual(
+        expect.objectContaining({
+            usertype:expect.any(Object),
+            category:expect.any(String)
+        })
+    )
+
+    //complete response verifying 
+    expect(responsefirstproduct).toEqual(
+    expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        price: expect.any(String),
+        brand: expect.any(String),
+
+        category: expect.objectContaining({
+            usertype: expect.any(Object),
+            category: expect.any(String)
+        })
+    })
+);
+})
+
+
+//both the above tests verified 
+
+//Json.stringfy with out null, pass the value, object, array. 
 //validate the complete schema of the response body not only the first product 
