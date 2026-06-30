@@ -1,4 +1,5 @@
 import {test,  expect } from '@playwright/test';
+import {APIRequestContext} from  '@playwright/test'
 
 const baseURL='https://automationexercise.com/api';
 
@@ -131,6 +132,13 @@ test('validating the structure of the response including the nested objects', as
 
 
 //Json.stringfy with out null, pass the value, object, array. 
-
+test('get fetching required body', async ({request}:{ request: APIRequestContext })=>{
+   const response = await request.get(`${baseURL}/productsList`)
+    const responsebody=await response.json()
+    const responsefirstproduct=responsebody.products[0]
+    const onlytwofields= JSON.stringify(responsefirstproduct,['id','name'],2)
+    console.log(await JSON.parse(onlytwofields));
+})
 
 //validate the complete schema of the response body not only the first product 
+// this test in separate file 
