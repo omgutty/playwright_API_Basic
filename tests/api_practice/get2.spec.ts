@@ -36,3 +36,19 @@ test('validate schema with utility', async ({request})=>{
     await validateSchema(productSchema,responsebody)
    // expect(status).tobe(true);
 })
+
+//header validation 
+ 
+test('header validation', async ({request})=>{
+    const response= await request.get(`${baseURL}/productsList`)
+    expect(response.status()).toBe(200);
+    const headers=await response.headers(); //all headers
+    console.log(headers); 
+    expect(headers['content-type']).toContain('text/html; charset=utf-8');
+    expect(headers['server']).toBeDefined();
+    expect(headers['cf-cache-status']).toBeDefined();
+
+    //single value fetching 
+   //const contentType = await response.headerValue('content-type');
+    //property headervalue is not availbale on type API response 
+})
