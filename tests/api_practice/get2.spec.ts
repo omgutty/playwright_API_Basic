@@ -4,6 +4,7 @@ import Ajv2020 from "ajv/dist/2020";
 import productSchema from '../schemas/productsSchema.json'
 import {validateSchema} from '../utility/schemaValidator.js'
 
+
 const baseURL='https://automationexercise.com/api';
 
 //validate the complete schema of the response body not only the first product 
@@ -52,3 +53,19 @@ test('header validation', async ({request})=>{
    //const contentType = await response.headerValue('content-type');
     //property headervalue is not availbale on type API response 
 })
+
+//using params in string concat in end point, we use this to pass in query parameter
+
+
+test('get request with query parameter ', async ({request})=>{
+    request.get(`${baseURL}/productsList`,{
+        params:{
+            brand:'nike',
+            page:2,
+            limit:20,
+            sort:'price'
+        }
+        //GET /products?brand=Nike&page=2&limit=20&sort=price
+    })
+})
+
