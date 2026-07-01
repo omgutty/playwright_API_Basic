@@ -1,4 +1,5 @@
 import {test,expect,request, APIRequestContext} from '@playwright/test'
+import { bookerTokenGeneration } from './booker_token';
 
 const baseURL='https://restful-booker.herokuapp.com';
 
@@ -52,5 +53,32 @@ test(`Creates a new booking in the API`, async({request})=>{
     expect(responsebody.bookingid).toBeDefined();
     console.log(bookingid);
     expect(bookingid).toEqual(expect.any(Number));
+   
 
+})
+
+test(`updatebooking`,async ({request})=>{
+    const token=bookerTokenGeneration(request);
+
+    const response= await request.put(`${baseURL}/booking/1`,{
+        headers:{
+            'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Cookie': `${token}`
+        },
+        data:{
+             "firstname" : "James",
+            "lastname" : "Brown",
+            "totalprice" : 111,
+            "depositpaid" : true,
+            "bookingdates" : {
+                "checkin" : "2026-01-01",
+                "checkout" : "2027-01-01"
+            },
+            "additionalneeds" : "Breakfast"
+        }
+    });
+
+    const responsebody=response.json();
+    expect(response.status()).toBe(200);
 })
